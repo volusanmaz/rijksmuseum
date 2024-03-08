@@ -46,7 +46,7 @@ class ArtObject {
       permitDownload: json['permitDownload'],
       webImage: WebImage.fromJson(json['webImage']),
       headerImage: HeaderImage.fromJson(json['headerImage']),
-      productionPlaces: List<String>.from(json['productionPlaces']),
+      productionPlaces: List<String>.from(json['productionPlaces'] ?? []),
     );
   }
 }

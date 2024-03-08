@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:rijksmuseum/controller/consts.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
 
@@ -11,7 +12,7 @@ import 'package:rijksmuseum/pages/splash_screen.dart';
 void main() async {
 
   await dotenv.load(fileName: ".env");
-  Consts.ApiKey= dotenv.env['API_KEY']!;
+  MobileAppConsts.ApiKey= dotenv.env['API_KEY']!;
   runApp(const MyApp());
 }
 
@@ -24,8 +25,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen()
+        builder: EasyLoading.init(),
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen()
     );
   }
 }

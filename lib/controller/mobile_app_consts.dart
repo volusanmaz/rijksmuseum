@@ -1,4 +1,4 @@
-class Consts{
+class MobileAppConsts{
   static String ApiKey="";
 
   //language can be "nl" or "en"
