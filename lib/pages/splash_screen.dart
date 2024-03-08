@@ -37,12 +37,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
-      body: Center(
-        child: Text(
-          'Splash Screen',
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        alignment: Alignment.center,
+
+        children: [Image.asset(
+          'assets/background.jpg',
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          fit: BoxFit.fill,
+        ), // Add some spacing between the images
+          Image.asset(
+            'assets/appicon.png',
+            width: 150,
+            height: 150,
+            fit: BoxFit.fill,
+          ),],
       ),
     );
   }

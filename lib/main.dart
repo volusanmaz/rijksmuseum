@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:rijksmuseum/controller/consts.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
-void main() {
+
+
+
+
+
+void main() async {
+
+  await dotenv.load(fileName: ".env");
+  Consts.ApiKey= dotenv.env['API_KEY']!;
   runApp(const MyApp());
 }
 

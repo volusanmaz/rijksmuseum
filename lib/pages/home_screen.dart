@@ -12,11 +12,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green,
-      body: Center(
-        child: Text(
-          'Home Screen',
-          style: TextStyle(fontSize: 24, color: Colors.white),
-        ),
+      body:Stack(
+        alignment: Alignment.center,
+
+        children: [Image.asset(
+          'assets/background.jpg',
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          fit: BoxFit.fill,
+        ), // Add some spacing between the images
+
+        ],
       ),
     );
   }
