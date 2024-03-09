@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (response.statusCode == 200) {
         EasyLoading.dismiss();
         EasyLoading.showSuccess("Success!");
-        print(response.body);
+
         Future.delayed(Duration(seconds: 3), () {
           MyApp.HomeScreenShown=true;
           Navigator.of(context).push(
@@ -53,11 +53,12 @@ class _SplashScreenState extends State<SplashScreen> {
         for (var json in jsonData['artObjects']) {
           artObjects.add(ArtObject.fromJson(json));
         }
-        print(artObjects.length);
+        MyApp.CollectionData.clear();
+        MyApp.CollectionData=await artObjects;
         return artObjects;
       } else {
         attempt++;
-        await Future.delayed(Duration(seconds: 10));
+        await Future.delayed(Duration(seconds: 5));
       }
     }
     final snackBar = SnackBar(
@@ -73,6 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     EasyLoading.dismiss();
+    EasyLoading.showError("Failed!");
     throw Exception('Failed to load data after $maxAttempts attempts');
   }
 
@@ -83,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     if(!MyApp.HomeScreenShown) {
-      fetchData();
+     fetchData();
     }
   }
 

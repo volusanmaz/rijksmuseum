@@ -15,6 +15,7 @@ class ArtObject {
   final WebImage webImage;
   final HeaderImage headerImage;
   final List<String> productionPlaces;
+  bool showLongTitle=false;
 
   ArtObject({
     required this.selfLink,
