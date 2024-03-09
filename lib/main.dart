@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
-import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
 
@@ -13,17 +12,16 @@ import 'package:rijksmuseum/pages/splash_screen.dart';
 void main() async {
 
   await dotenv.load(fileName: ".env");
-  MobileAppConsts.ApiKey= dotenv.env['API_KEY']!;
+  MobileAppItems.ApiKey= dotenv.env['API_KEY']!;
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static List<ArtObject> CollectionData=[];
-  static bool HomeScreenShown=false;
+
 
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

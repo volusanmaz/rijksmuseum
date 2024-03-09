@@ -17,7 +17,9 @@ class ArtObjectDetail {
   final String subTitle;
   final String scLabelLine;
   final Label label;
-
+  final List<dynamic> documentation;
+  final String principalOrFirstMaker;
+  final String location;
   ArtObjectDetail({
     required this.id,
     required this.objectNumber,
@@ -31,6 +33,9 @@ class ArtObjectDetail {
     required this.subTitle,
     required this.scLabelLine,
     required this.label,
+    required this.documentation,
+    required this.principalOrFirstMaker,
+    required this.location
   });
 
   factory ArtObjectDetail.fromJson(Map<String, dynamic> json) {
@@ -47,6 +52,10 @@ class ArtObjectDetail {
       subTitle: json['subTitle'],
       scLabelLine: json['scLabelLine'],
       label: Label.fromJson(json['label']),
+      documentation: json['documentation'],
+      principalOrFirstMaker: json['principalOrFirstMaker'],
+      location: json['location']
+
     );
   }
 }
