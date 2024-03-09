@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:rijksmuseum/main.dart';
-import 'package:rijksmuseum/models/art_object.dart';
+import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'dart:convert';
 import 'package:rijksmuseum/pages/home_screen.dart';
 import 'package:http/http.dart' as http;

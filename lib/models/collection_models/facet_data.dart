@@ -1,4 +1,4 @@
-import 'package:rijksmuseum/models/facets_key_value.dart';
+import 'package:rijksmuseum/models/collection_models/facets_key_value.dart';
 
 class FacetData {
   final List<FacetsKeyValue> facets;

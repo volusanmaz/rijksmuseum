@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
-import 'package:rijksmuseum/models/art_object.dart';
+import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
 

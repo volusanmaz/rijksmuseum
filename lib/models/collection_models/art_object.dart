@@ -1,5 +1,5 @@
-import 'package:rijksmuseum/models/header_image.dart';
-import 'package:rijksmuseum/models/web_image.dart';
+import 'package:rijksmuseum/models/collection_models/header_image.dart';
+import 'package:rijksmuseum/models/collection_models/web_image.dart';
 
 class ArtObject {
   final String selfLink;
