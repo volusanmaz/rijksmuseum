@@ -1,9 +1,9 @@
 class Label {
-  final String title;
-  final String makerLine;
-  final String description;
+  final String? title;
+  final String? makerLine;
+  final String? description;
   final String? notes;
-  final DateTime date;
+  final DateTime? date;
 
   Label({
     required this.title,

@@ -3,6 +3,7 @@ import 'package:cube_transition_plus/cube_transition_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
+import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:rijksmuseum/pages/detail_page.dart';
@@ -15,8 +16,97 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  Future<List<ArtObject>> fetchData() async {
+    try{
+      EasyLoading.instance
+        ..loadingStyle = EasyLoadingStyle.custom
+        ..indicatorType=EasyLoadingIndicatorType.cubeGrid
+        ..indicatorColor = Colors.black
+        ..backgroundColor=Colors.grey
+        ..textColor = Colors.black;
+
+      EasyLoading.show(status: "Loading",);
+
+      int maxAttempts = 5;
+      int attempt = 0;
+
+      while (attempt < maxAttempts) {
+        final response = await http.get(Uri.parse(MobileAppItems.CollectionApiAdress("en")));
+        if (response.statusCode == 200) {
+          EasyLoading.dismiss();
+          EasyLoading.showSuccess("Success!");
+
+
+          Map<String, dynamic> jsonData = json.decode(response.body);
+          List<ArtObject> artObjects = [];
+          for (var json in jsonData['artObjects']) {
+            artObjects.add(ArtObject.fromJson(json));
+          }
+          MobileAppItems.CollectionData.clear();
+          MobileAppItems.CollectionData=await artObjects;
+
+          return artObjects;
+        } else {
+          attempt++;
+          await Future.delayed(Duration(seconds: 5));
+        }
+      }
+      final snackBar = SnackBar(
+        content: Text('Failed to load data after $maxAttempts attempts'),
+        duration: Duration(seconds: 2), // Optional, default is 4 seconds
+        action: SnackBarAction(
+          label: 'Close',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      EasyLoading.dismiss();
+      EasyLoading.showError("Failed!");
+      throw Exception('Failed to load data after $maxAttempts attempts');
+    }catch(e){
+      final snackBar = SnackBar(
+        content: Text('Failed to load data with error: $e'),
+        duration: Duration(seconds: 2), // Optional, default is 4 seconds
+        action: SnackBarAction(
+          label: 'Close',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      EasyLoading.dismiss();
+      EasyLoading.showError("Failed!");
+      throw Exception('Failed to load data with error: $e');
+
+
+    }
+
+
+  }
+
+
+
+  TextEditingController PageNumber=TextEditingController();
+  TextEditingController ItemsPerPage=TextEditingController();
+
+
+
+
+
+  @override
+  void initState() {
+    PageNumber.text=MobileAppItems.PageNumber.toString();
+    ItemsPerPage.text=MobileAppItems.NumberOfItems.toString();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -359,7 +449,114 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           )
         ],
+      ),bottomNavigationBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+    child: Container(
+    decoration: BoxDecoration(
+    boxShadow: [
+    BoxShadow(
+    color: Colors.black26,
+    blurRadius: 4.0,
+    spreadRadius: 1.0,
+    offset: Offset(0, 2),
+    ),
+    ],
+    ),
+    child:BottomAppBar(
+      child: Container(width: MediaQuery.of(context).size.width,
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  controller: PageNumber,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                      fontSize: 12, // Küçük boyut
+                    ),
+                    labelText: 'Page Number',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    // Handle page number change
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  controller:ItemsPerPage,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                      fontSize: 12, // Küçük boyut
+                    ),
+                    labelText: 'Item Per Page',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    // Handle items per page change
+                  },
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async{
+                try {
+                  if(int.parse(ItemsPerPage.text)* int.parse(PageNumber.text)<10000){
+                    MobileAppItems.NumberOfItems = int.parse(ItemsPerPage.text);
+                    MobileAppItems.PageNumber = int.parse(PageNumber.text);
+                    await fetchData();
+                    setState(() {
+
+                    });
+                  }else{final snackBar = SnackBar(
+                    content: Text("(Items per page * Page Number) cant exceed 10000"),
+                    duration: Duration(seconds: 2), // Optional, default is 4 seconds
+                    action: SnackBarAction(
+                      label: 'Close',
+                      onPressed: () {
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }catch(e){
+                  final snackBar = SnackBar(
+                    content: Text(e.toString()),
+                    duration: Duration(seconds: 2), // Optional, default is 4 seconds
+                    action: SnackBarAction(
+                      label: 'Close',
+                      onPressed: () {
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                }
+
+
+              },
+              child: Text('Update'),
+            ),
+          ],
+        ),
       ),
+    ),
+    ))
+
     );
   }
 }
