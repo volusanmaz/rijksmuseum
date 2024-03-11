@@ -2,15 +2,13 @@
 
 Project for assignment...
 
-## Getting Started
+App Screenshots
 
-This project is a starting point for a Flutter application.
+![Screenshot_20240310_121333](https://github.com/volusanmaz/rijksmuseum/assets/102143944/10a9576c-b6c0-483f-b265-a7711cdcad6f){ width=300 height=800 }
+![Screenshot_20240310_121346](https://github.com/volusanmaz/rijksmuseum/assets/102143944/e3546857-bc3c-4fe1-910d-5fb3143ddcc8){ width=300 height=800 }
+![Screenshot_20240310_121433](https://github.com/volusanmaz/rijksmuseum/assets/102143944/8599e97f-5ded-4454-bf22-926b9a3ccd45){ width=300 height=800 }
+![Screenshot_20240310_121409](https://github.com/volusanmaz/rijksmuseum/assets/102143944/c7a4b818-853a-4ff3-8461-43ffbd6fb989){ width=300 height=800 }
 
-A few resources to get you started if this is your first Flutter project:
+AppVideo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[https://drive.google.com/file/d/17sWySC13uXKXCPISamUtfjhLB-pQIdfE/view?usp=sharing](https://drive.google.com/file/d/17sWySC13uXKXCPISamUtfjhLB-pQIdfE/view?usp=sharing)https://drive.google.com/file/d/17sWySC13uXKXCPISamUtfjhLB-pQIdfE/view?usp=sharing
