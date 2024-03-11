@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
             CubePageRoute(
               enterPage: HomeScreen(),
               exitPage: SplashScreen(),
-              duration: const Duration(milliseconds: 900),
+              duration: const Duration(milliseconds: 1500),
             ),
           );
         });
