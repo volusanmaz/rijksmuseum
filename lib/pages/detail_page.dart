@@ -49,7 +49,7 @@ class _DetailPageState extends State<DetailPage> {
                             Navigator.pop(context);
                           },
                         ),
-                        title: Text(MobileAppItems.detailData!.artObject.title),
+
                       ))),
               body: Stack(
                 children: [Stack(

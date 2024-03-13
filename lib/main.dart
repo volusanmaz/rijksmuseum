@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         home: SplashScreen()
     );

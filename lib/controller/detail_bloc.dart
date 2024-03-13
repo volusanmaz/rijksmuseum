@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:http/http.dart' as http;
 import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart';
@@ -12,6 +13,11 @@ class DetailBloc {
   Future<void> fetchData(String selfLink) async {
 
     try {
+      // Check internet connection
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        throw Exception('No internet connection');
+      }
       final response = await http.get(Uri.parse(selfLink));
 
         if (response.statusCode == 200) {

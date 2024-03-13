@@ -13,6 +13,11 @@ class CollectivesBloc {
     return _instance;
   }
 
+
+
+  // HTTP client instance
+  http.Client httpClient = http.Client();
+
   CollectivesBloc._internal();
 
   // StreamController for broadcasting stream
