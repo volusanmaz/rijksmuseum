@@ -1,15 +1,16 @@
 import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart';
-
+import 'package:flutter/material.dart';
 class MobileAppItems{
-  static int PageNumber=1;
-  static int NumberOfItems=5;
-  static String ApiKey="";
-  static List<ArtObject> CollectionData=[];
-  static bool HomeScreenShown=false;
-  static late ArtObjectResponse? DetailData;
+  static int pageNumber=1;
+  static int numberOfItems=5;
+  static String apiKey="";
+  static List<ArtObject> collectionData=[];
+  static bool homeScreenShown=false;
+  static late ArtObjectResponse? detailData;
+  static String detailselflink="";
   //language can be "nl" or "en"
-  static String CollectionApiAdress(String language){return "https://www.rijksmuseum.nl/api/$language/collection?key=$ApiKey&culture=$language&p=$PageNumber&ps=$NumberOfItems";}
-
+  static String collectionApiAdress(String language){return "https://www.rijksmuseum.nl/api/$language/collection?key=$apiKey&culture=$language&p=$pageNumber&ps=$numberOfItems";}
+  static const backgroundColor=Color(0xfff2f2f2);
 
 }

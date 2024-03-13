@@ -12,7 +12,7 @@ import 'package:rijksmuseum/pages/splash_screen.dart';
 void main() async {
 
   await dotenv.load(fileName: ".env");
-  MobileAppItems.ApiKey= dotenv.env['API_KEY']!;
+  MobileAppItems.apiKey= dotenv.env['API_KEY']!;
   runApp(const MyApp());
 }
 
