@@ -7,7 +7,7 @@ class ArtObjectDetailPage {
   final String lang;
   final String objectNumber;
   final List<dynamic> tags;
-  final String plaqueDescription;
+  final String? plaqueDescription;
   final String? audioFile1;
   final String? audioFileLabel1;
   final String? audioFileLabel2;
@@ -37,7 +37,7 @@ class ArtObjectDetailPage {
       lang: json['lang'],
       objectNumber: json['objectNumber'],
       tags: json['tags'],
-      plaqueDescription: json['plaqueDescription'],
+      plaqueDescription: json['plaqueDescription']??"PlaqueDescription : No Description",
       audioFile1: json['audioFile1'],
       audioFileLabel1: json['audioFileLabel1'],
       audioFileLabel2: json['audioFileLabel2'],

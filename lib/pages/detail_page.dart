@@ -16,7 +16,7 @@ class _DetailPageState extends State<DetailPage> {
   final DetailBloc _detailBloc = DetailBloc();
   @override
   void initState() {
-    _detailBloc.fetchData(MobileAppItems.detailselflink);
+    _detailBloc.fetchData(DetailBloc.detailLink);
     super.initState();
   }
   bool _isLoading=false;
@@ -114,7 +114,7 @@ class _DetailPageState extends State<DetailPage> {
                             Navigator.pop(context);
                           },
                         ),
-                        title: Text(MobileAppItems.detailData!.artObject.title),
+                        title: Text(DetailBloc.detailData?.artObject.title??"No Title"),
                       ))),
               body: Stack(
                 children: [Image.asset(
@@ -164,7 +164,7 @@ class _DetailPageState extends State<DetailPage> {
                               Future.delayed(Duration(seconds: 3), () {
                                 if (_isDisposed) return;
 
-                                _detailBloc.fetchData(MobileAppItems.detailselflink).then((_) {
+                                _detailBloc.fetchData(DetailBloc.detailLink).then((_) {
                                   setState(() {
                                     _isLoading = false; // Reset loading state after fetch
                                   });
@@ -211,7 +211,7 @@ class _DetailPageState extends State<DetailPage> {
                             Navigator.pop(context);
                           },
                         ),
-                        title: Text(MobileAppItems.detailData!.artObject.title),
+                        title: Text(DetailBloc.detailData?.artObject.title ?? "No title") ,
                       ))),
               body: Stack(
                 children: [  Image.asset(
@@ -233,11 +233,11 @@ class _DetailPageState extends State<DetailPage> {
                           children: <Widget>[
                             Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Image.network(
-                                  MobileAppItems.detailData!.artObject.webImage.url,
+                                child: DetailBloc.containsImage?Image.network(
+                                  DetailBloc.detailData!.artObject.webImage!.url,
                                   height: (MediaQuery.of(context).size.width *
-                                      (MobileAppItems.detailData!.artObject.webImage.height /
-                                          MobileAppItems.detailData!.artObject.webImage.width)) /
+                                      (DetailBloc.detailData!.artObject.webImage!.height /
+                                          DetailBloc.detailData!.artObject.webImage!.width)) /
                                       1.2,
                                   width: MediaQuery.of(context).size.width / 1.2,
                                   fit: BoxFit.fill,
@@ -255,17 +255,17 @@ class _DetailPageState extends State<DetailPage> {
                                       );
                                     }
                                   },
-                                )),
+                                ):Container()),
                             ListTile(
                               title: Text(
-                                MobileAppItems.detailData!.artObject.longTitle,
+                                DetailBloc.detailData?.artObject.longTitle ?? "No long title",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                 ),
                               ),
                               subtitle: Text(
-                                'Object Number : ${MobileAppItems.detailData!.artObjectPage.objectNumber} \n${MobileAppItems.detailData!.artObjectPage.plaqueDescription}',
+                                'Object Number : ${DetailBloc.detailData?.artObject.objectNumber ??"Does not have one..."} \n${DetailBloc.detailData?.artObjectPage.plaqueDescription ?? ""}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                 ),
@@ -275,7 +275,7 @@ class _DetailPageState extends State<DetailPage> {
 
                             ListTile(
                               title: const Text('Principal or First Maker'),
-                              subtitle: Text(MobileAppItems.detailData!.artObject.principalOrFirstMaker),
+                              subtitle: Text(DetailBloc.detailData?.artObject.principalOrFirstMaker ??" Not Defined"),
                             ),
 
                             ListTile(
@@ -283,22 +283,22 @@ class _DetailPageState extends State<DetailPage> {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Title: ${MobileAppItems.detailData!.artObject.label.title}'),
-                                  Text('Maker Line: ${MobileAppItems.detailData!.artObject.label.makerLine}'),
-                                  Text('Description: ${MobileAppItems.detailData!.artObject.label.description}'),
-                                  Text('Date: ${MobileAppItems.detailData!.artObject.label.date}'),
+                                  Text('Title: ${DetailBloc.detailData?.artObject?.label.title ??"Not Defined"}'),
+                                  Text('Maker Line: ${DetailBloc.detailData?.artObject?.label.makerLine??"Not Defined"}'),
+                                  Text('Description: ${DetailBloc.detailData?.artObject?.label.description??"Not Defined"}'),
+                                  Text('Date: ${DetailBloc.detailData?.artObject?.label.date ??"Not Defined"}'),
                                 ],
                               ),
                             ),ListTile(
                               title: const Text('Dimensions'),
-                              subtitle: Text(MobileAppItems.detailData!.artObject.subTitle),
+                              subtitle: Text(DetailBloc.detailData?.artObject.subTitle??"Not Defined"),
                             ),
                             ListTile(
                               title: const Text('Location'),
-                              subtitle: Text(MobileAppItems.detailData!.artObject.location),
+                              subtitle: Text(DetailBloc.detailData?.artObject.location??"Not Defined"),
                             ), ListTile(
                               title: const Text('Documentation'),
-                              subtitle: Text( MobileAppItems.detailData!.artObject.documentation.join('\n')),
+                              subtitle:DetailBloc.detailData!.artObject.documentation.length<1? Text("No Documantation"):Text( DetailBloc.detailData!.artObject.documentation.join('\n')),
                             ),
                           ],
                         ),

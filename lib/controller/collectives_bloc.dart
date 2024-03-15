@@ -13,7 +13,7 @@ class CollectivesBloc {
     return _instance;
   }
 
-
+  static List<ArtObject> collectionData=[];
 
   // HTTP client instance
   http.Client httpClient = http.Client();
@@ -42,8 +42,8 @@ class CollectivesBloc {
         for (var json in jsonData['artObjects']) {
           artObjects.add(ArtObject.fromJson(json));
         }
-        MobileAppItems.collectionData.clear();
-        MobileAppItems.collectionData = artObjects;
+        collectionData.clear();
+        collectionData = artObjects;
         _artObjectsController.sink.add(artObjects);
       } else {
         throw Exception('Failed to load data with code ${response.statusCode}');

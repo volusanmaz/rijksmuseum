@@ -19,7 +19,7 @@ class Label {
       makerLine: json['makerLine'],
       description: json['description'],
       notes: json['notes'],
-      date: DateTime.parse(json['date']),
+      date: json['date']==null?null:DateTime.parse(json['date']),
     );
   }
 }

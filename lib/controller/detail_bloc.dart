@@ -6,12 +6,15 @@ import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart
 import 'dart:convert';
 
 class DetailBloc {
+  static bool containsImage=true;
+  static ArtObjectResponse? detailData=null;
+  static String detailLink="";
   final _detailDataController = StreamController<ArtObjectResponse>.broadcast();
 
   Stream<ArtObjectResponse> get detailDataStream => _detailDataController.stream;
 
   Future<void> fetchData(String selfLink) async {
-
+print(detailLink);
     try {
       // Check internet connection
       var connectivityResult = await Connectivity().checkConnectivity();
@@ -24,8 +27,8 @@ class DetailBloc {
           Map<String, dynamic> jsonData = json.decode(response.body);
           ArtObjectResponse artObject = ArtObjectResponse.fromJson(jsonData);
 
-          MobileAppItems.detailData = null;
-          MobileAppItems.detailData = artObject;
+          detailData = null;
+          detailData = artObject;
 
           _detailDataController.sink.add(artObject);
 

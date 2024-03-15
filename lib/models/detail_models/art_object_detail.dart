@@ -1,3 +1,4 @@
+import 'package:rijksmuseum/controller/detail_bloc.dart';
 import 'package:rijksmuseum/models/detail_models/art_color.dart';
 import 'package:rijksmuseum/models/detail_models/art_color_with_normalization.dart';
 import 'package:rijksmuseum/models/detail_models/art_dimension.dart';
@@ -8,7 +9,7 @@ class ArtObjectDetail {
   final String id;
   final String objectNumber;
   final String title;
-  final WebImageDetail webImage;
+  final WebImageDetail? webImage;
   final List<ArtColor> colors;
   final List<ArtColorWithNormalization> colorsWithNormalization;
   final List<ArtColor> normalizedColors;
@@ -19,7 +20,7 @@ class ArtObjectDetail {
   final Label label;
   final List<dynamic> documentation;
   final String principalOrFirstMaker;
-  final String location;
+  final String? location;
   ArtObjectDetail({
     required this.id,
     required this.objectNumber,
@@ -43,7 +44,7 @@ class ArtObjectDetail {
       id: json['id'],
       objectNumber: json['objectNumber'],
       title: json['title'],
-      webImage: WebImageDetail.fromJson(json['webImage']),
+      webImage:DetailBloc.containsImage? WebImageDetail.fromJson(json['webImage']):null,
       colors: (json['colors'] as List<dynamic>).map((colorJson) => ArtColor.fromJson(colorJson)).toList(),
       normalizedColors: (json['normalizedColors'] as List<dynamic>).map((colorJson) => ArtColor.fromJson(colorJson)).toList(),
       colorsWithNormalization: (json['colorsWithNormalization'] as List<dynamic>).map((colorJson) => ArtColorWithNormalization.fromJson(colorJson)).toList(),
@@ -54,7 +55,7 @@ class ArtObjectDetail {
       label: Label.fromJson(json['label']),
       documentation: json['documentation'],
       principalOrFirstMaker: json['principalOrFirstMaker'],
-      location: json['location']
+      location: json['location']??"Not known"
 
     );
   }

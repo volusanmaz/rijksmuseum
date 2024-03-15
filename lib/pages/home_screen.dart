@@ -1,6 +1,7 @@
 import 'package:cube_transition_plus/cube_transition_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rijksmuseum/controller/collectives_bloc.dart';
+import 'package:rijksmuseum/controller/detail_bloc.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:rijksmuseum/models/collection_models/art_object.dart';
 import 'package:rijksmuseum/pages/detail_page.dart';
@@ -138,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? MediaQuery.of(context).size.width * 0.5
                             : MediaQuery.of(context).size.width,
                         child: ListView.builder(
-                          itemCount: MobileAppItems.collectionData.length,
+                          itemCount: CollectivesBloc.collectionData.length,
                           itemBuilder: (context, index) {
-                            var artObject = MobileAppItems.collectionData[index];
+                            var artObject = CollectivesBloc.collectionData[index];
 
 
                             return Card(
@@ -160,12 +161,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: !(MediaQuery.of(context).size.width > 700)
                                           ? Stack(
                                         children: [
-                                          Image.network(
-                                            artObject.headerImage.url,
+                                          artObject.hasImage?Image.network(
+                                            artObject.headerImage!.url,
                                             height:
                                             MediaQuery.of(context).size.width *
-                                                (artObject.headerImage.height /
-                                                    artObject.headerImage.width),
+                                                (artObject.headerImage!.height /
+                                                    artObject.headerImage!.width),
                                             width: MediaQuery.of(context).size.width,
                                             fit: BoxFit.fill,
                                             loadingBuilder:
@@ -187,21 +188,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 );
                                               }
                                             },
-                                          ),
+                                          ):Image.asset("assets/nophoto.jpg",height: 200),
                                           Positioned(
                                             bottom: 8.0,
                                             right: 8.0,
                                             child: GestureDetector(
                                               onTap: () {
-                                                MobileAppItems.detailselflink='${artObject.selfLink}?key=${MobileAppItems.apiKey}';
-
-                                                Navigator.of(context).push(
-                                                  CubePageRoute(
-                                                    enterPage: const DetailPage(),
-                                                    exitPage: const HomeScreen(),
-                                                    duration: const Duration(milliseconds: 1500),
-                                                  ),
-                                                );
+                                                navigateToNextPage(artObject);
                                               },
                                               child: Container(
                                                 decoration: const BoxDecoration(
@@ -222,17 +215,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : Stack(
                                         children: [
                                           Center(
-                                            child: Image.network(
-                                              artObject.headerImage.url,
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                                  (artObject.headerImage.height /
-                                                      artObject.headerImage.width) /
-                                                  3,
-                                              width:
-                                              MediaQuery.of(context).size.width /
-                                                  3,
+                                            child: artObject.hasImage?Image.network(
+                                              artObject.headerImage!.url,
+                                              height:
+                                              MediaQuery.of(context).size.width *
+                                                  (artObject.headerImage!.height /
+                                                      artObject.headerImage!.width),
+                                              width: MediaQuery.of(context).size.width,
                                               fit: BoxFit.fill,
                                               loadingBuilder:
                                                   (context, child, loadingProgress) {
@@ -253,22 +242,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   );
                                                 }
                                               },
-                                            ),
+                                            ):Image.asset("assets/nophoto.jpg",height: 200),
                                           ),
                                           Positioned(
                                             bottom: 16.0,
                                             right: 64.0,
                                             child: GestureDetector(
                                               onTap: () {
-                                                MobileAppItems.detailselflink='${artObject.selfLink}?key=${MobileAppItems.apiKey}';
-
-                                                Navigator.of(context).push(
-                                                  CubePageRoute(
-                                                    enterPage: const DetailPage(),
-                                                    exitPage: const HomeScreen(),
-                                                    duration: const Duration(milliseconds: 1500),
-                                                  ),
-                                                );
+                                                navigateToNextPage(artObject);
                                               },
                                               child: Container(
                                                 decoration: const BoxDecoration(
@@ -404,10 +385,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             });
                                           }else{final snackBar = SnackBar(
                                             content: const Text("(Items per page * Page Number) cant exceed 10000"),
-                                            duration: const Duration(seconds: 2), // Optional, default is 4 seconds
+                                            duration: const Duration(seconds: 5),
                                             action: SnackBarAction(
                                               label: 'Close',
                                               onPressed: () {
+                                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                               },
                                             ),
                                           );
@@ -416,10 +398,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }catch(e){
                                           final snackBar = SnackBar(
                                             content: Text(e.toString()),
-                                            duration: const Duration(seconds: 2), // Optional, default is 4 seconds
+                                            duration: const Duration(seconds: 5),
                                             action: SnackBarAction(
                                               label: 'Close',
                                               onPressed: () {
+                                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                               },
                                             ),
                                           );
@@ -527,9 +510,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? MediaQuery.of(context).size.width * 0.5
                             : MediaQuery.of(context).size.width,
                         child: ListView.builder(
-                          itemCount: MobileAppItems.collectionData.length,
+                          itemCount: CollectivesBloc.collectionData.length,
                           itemBuilder: (context, index) {
-                            var artObject = MobileAppItems.collectionData[index];
+                            var artObject = CollectivesBloc.collectionData[index];
 
 
 
@@ -550,47 +533,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: !(MediaQuery.of(context).size.width > 700)
                                           ? Stack(
                                         children: [
-                                          Image.network(
-                                            artObject.headerImage.url,
-                                            height:
-                                            MediaQuery.of(context).size.width *
-                                                (artObject.headerImage.height /
-                                                    artObject.headerImage.width),
-                                            width: MediaQuery.of(context).size.width,
-                                            fit: BoxFit.fill,
-                                            loadingBuilder:
-                                                (context, child, loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              } else {
-                                                return Center(
-                                                  child: CircularProgressIndicator(
-                                                    value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                        null
-                                                        ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                        : null,
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          ),
+                                      artObject.hasImage?Image.network(
+                                      artObject.headerImage!.url,
+                                        height:
+                                        MediaQuery.of(context).size.width *
+                                            (artObject.headerImage!.height /
+                                                artObject.headerImage!.width),
+                                        width: MediaQuery.of(context).size.width,
+                                        fit: BoxFit.fill,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          } else {
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                    null
+                                                    ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ):Image.asset("assets/nophoto.jpg",height: 120,width: MediaQuery.of(context).size.width,fit: BoxFit.fill,),
                                           Positioned(
                                             bottom: 8.0,
                                             right: 8.0,
                                             child: GestureDetector(
                                               onTap: () {
-                                                MobileAppItems.detailselflink='${artObject.selfLink}?key=${MobileAppItems.apiKey}';
-                                                Navigator.of(context).push(
-                                                  CubePageRoute(
-                                                    enterPage: const DetailPage(),
-                                                    exitPage: const HomeScreen(),
-                                                    duration: const Duration(milliseconds: 1500),
-                                                  ),
-                                                );
+                                                navigateToNextPage(artObject);
                                               },
                                               child: Container(
                                                 decoration: const BoxDecoration(
@@ -611,17 +587,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : Stack(
                                         children: [
                                           Center(
-                                            child: Image.network(
-                                              artObject.headerImage.url,
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                                  (artObject.headerImage.height /
-                                                      artObject.headerImage.width) /
-                                                  3,
-                                              width:
-                                              MediaQuery.of(context).size.width /
-                                                  3,
+                                            child:artObject.hasImage?Image.network(
+                                              artObject.headerImage!.url,
+                                              height:
+                                              MediaQuery.of(context).size.width *
+                                                  (artObject.headerImage!.height /
+                                                      artObject.headerImage!.width),
+                                              width: MediaQuery.of(context).size.width,
                                               fit: BoxFit.fill,
                                               loadingBuilder:
                                                   (context, child, loadingProgress) {
@@ -642,22 +614,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   );
                                                 }
                                               },
-                                            ),
+                                            ):Image.asset("assets/nophoto.jpg",height: 200,),
                                           ),
                                           Positioned(
                                             bottom: 16.0,
                                             right: 64.0,
                                             child: GestureDetector(
                                               onTap: () {
-
-                                                MobileAppItems.detailselflink='${artObject.selfLink}?key=${MobileAppItems.apiKey}';
-                                                Navigator.of(context).push(
-                                                  CubePageRoute(
-                                                    enterPage: const DetailPage(),
-                                                    exitPage: const HomeScreen(),
-                                                    duration: const Duration(milliseconds: 1500),
-                                                  ),
-                                                );
+                                                navigateToNextPage(artObject);
 
 
                                               },
@@ -840,6 +804,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       resizeToAvoidBottomInset: true,
 
+    );
+  }
+  void navigateToNextPage(ArtObject artObject){
+    DetailBloc.detailLink='${artObject.selfLink}?key=${MobileAppItems.apiKey}';
+    DetailBloc.containsImage=artObject.hasImage;
+    Navigator.of(context).push(
+      CubePageRoute(
+        enterPage: const DetailPage(),
+        exitPage: const HomeScreen(),
+        duration: const Duration(milliseconds: 1500),
+      ),
     );
   }
 }

@@ -5,10 +5,9 @@ class MobileAppItems{
   static int pageNumber=1;
   static int numberOfItems=5;
   static String apiKey="";
-  static List<ArtObject> collectionData=[];
+
   static bool homeScreenShown=false;
-  static late ArtObjectResponse? detailData;
-  static String detailselflink="";
+
   //language can be "nl" or "en"
   static String collectionApiAdress(String language){return "https://www.rijksmuseum.nl/api/$language/collection?key=$apiKey&culture=$language&p=$pageNumber&ps=$numberOfItems";}
   static const backgroundColor=Color(0xfff2f2f2);

@@ -12,9 +12,9 @@ class ArtObject {
   final String longTitle;
   final bool showImage;
   final bool permitDownload;
-  final WebImage webImage;
-  final HeaderImage headerImage;
-  final List<String> productionPlaces;
+  final WebImage? webImage;
+  final HeaderImage? headerImage;
+  final List<String>? productionPlaces;
   bool showLongTitle=false;
 
   ArtObject({
@@ -34,19 +34,20 @@ class ArtObject {
   });
 
   factory ArtObject.fromJson(Map<String, dynamic> json) {
+    final bool containsImage = json['hasImage']  ;
     return ArtObject(
       selfLink: json['links']['self'],
       webLink: json['links']['web'],
-      id: json['id'],
-      objectNumber: json['objectNumber'],
-      title: json['title'],
-      hasImage: json['hasImage'],
-      principalOrFirstMaker: json['principalOrFirstMaker'],
-      longTitle: json['longTitle'],
-      showImage: json['showImage'],
-      permitDownload: json['permitDownload'],
-      webImage: WebImage.fromJson(json['webImage']),
-      headerImage: HeaderImage.fromJson(json['headerImage']),
+      id: json['id']??"",
+      objectNumber: json['objectNumber']??"",
+      title: json['title']??"",
+      hasImage: json['hasImage']??"",
+      principalOrFirstMaker: json['principalOrFirstMaker']??"",
+      longTitle: json['longTitle']??"",
+      showImage: json['showImage']??"",
+      permitDownload: json['permitDownload']??"",
+      webImage: containsImage?WebImage.fromJson(json['webImage']): null,
+      headerImage: containsImage?HeaderImage.fromJson(json['headerImage']):null,
       productionPlaces: List<String>.from(json['productionPlaces'] ?? []),
     );
   }
