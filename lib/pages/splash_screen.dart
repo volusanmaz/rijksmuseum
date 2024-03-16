@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             _isLoading = true; // Update loading state
                           });
 
-                          Future.delayed(Duration(seconds: 3), () {
+                          Future.delayed(const Duration(seconds: 3), () {
                             CollectivesBloc().fetchData().then((_) {
                               setState(() {
                                 _isLoading = false; // Reset loading state after fetch

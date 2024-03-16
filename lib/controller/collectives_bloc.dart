@@ -17,7 +17,7 @@ class CollectivesBloc {
 
   // HTTP client instance
   http.Client httpClient = http.Client();
-
+  Connectivity connectivity=Connectivity();
   CollectivesBloc._internal();
 
   // StreamController for broadcasting stream
@@ -29,8 +29,9 @@ class CollectivesBloc {
   // Method to fetch data
   Future<void> fetchData() async {
     try {
+      List<ArtObject> artObjects = [];
       // Check internet connection
-      var connectivityResult = await Connectivity().checkConnectivity();
+      var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         throw Exception('No internet connection');
       }
@@ -38,7 +39,7 @@ class CollectivesBloc {
       final response = await http.get(Uri.parse(MobileAppItems.collectionApiAdress("en")));
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
-        List<ArtObject> artObjects = [];
+
         for (var json in jsonData['artObjects']) {
           artObjects.add(ArtObject.fromJson(json));
         }

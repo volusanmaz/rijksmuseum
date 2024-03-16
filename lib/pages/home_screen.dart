@@ -54,7 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: AppBar(
                 backgroundColor:MobileAppItems.backgroundColor ,
-                title: const Text('Rijks Museum Api Assignment'),
+                title: const Text('Rijks Museum Assignment',style: TextStyle(fontSize: 18),),actions: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.search),
+                  ),Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.grid_on),
+                  )
+              ],
               ))),
       drawer: Drawer(
         child: ListView(
@@ -469,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               _isLoading = true; // Update loading state
                             });
 
-                            Future.delayed(Duration(seconds: 3), () {
+                            Future.delayed(const Duration(seconds: 3), () {
                               CollectivesBloc().fetchData().then((_) {
                                 setState(() {
                                   _isLoading = false; // Reset loading state after fetch
@@ -491,7 +499,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             );
           } else {
-            // Display your UI using the data from snapshot.data
             return Stack(
               alignment: Alignment.center,
               children: [

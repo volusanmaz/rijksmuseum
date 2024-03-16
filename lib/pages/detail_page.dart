@@ -161,7 +161,7 @@ class _DetailPageState extends State<DetailPage> {
                                 _isLoading = true; // Update loading state
                               });
 
-                              Future.delayed(Duration(seconds: 3), () {
+                              Future.delayed(const Duration(seconds: 3), () {
                                 if (_isDisposed) return;
 
                                 _detailBloc.fetchData(DetailBloc.detailLink).then((_) {
@@ -283,10 +283,10 @@ class _DetailPageState extends State<DetailPage> {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Title: ${DetailBloc.detailData?.artObject?.label.title ??"Not Defined"}'),
-                                  Text('Maker Line: ${DetailBloc.detailData?.artObject?.label.makerLine??"Not Defined"}'),
-                                  Text('Description: ${DetailBloc.detailData?.artObject?.label.description??"Not Defined"}'),
-                                  Text('Date: ${DetailBloc.detailData?.artObject?.label.date ??"Not Defined"}'),
+                                  Text('Title: ${DetailBloc.detailData?.artObject.label.title ??"Not Defined"}'),
+                                  Text('Maker Line: ${DetailBloc.detailData?.artObject.label.makerLine??"Not Defined"}'),
+                                  Text('Description: ${DetailBloc.detailData?.artObject.label.description??"Not Defined"}'),
+                                  Text('Date: ${DetailBloc.detailData?.artObject.label.date ??"Not Defined"}'),
                                 ],
                               ),
                             ),ListTile(
@@ -298,7 +298,7 @@ class _DetailPageState extends State<DetailPage> {
                               subtitle: Text(DetailBloc.detailData?.artObject.location??"Not Defined"),
                             ), ListTile(
                               title: const Text('Documentation'),
-                              subtitle:DetailBloc.detailData!.artObject.documentation.length<1? Text("No Documantation"):Text( DetailBloc.detailData!.artObject.documentation.join('\n')),
+                              subtitle:DetailBloc.detailData!.artObject.documentation.isEmpty? const Text("No Documantation"):Text( DetailBloc.detailData!.artObject.documentation.join('\n')),
                             ),
                           ],
                         ),

@@ -34,14 +34,14 @@ class ArtObject {
   });
 
   factory ArtObject.fromJson(Map<String, dynamic> json) {
-    final bool containsImage = json['hasImage']  ;
+    final bool containsImage = json['hasImage'] ?? false ;
     return ArtObject(
       selfLink: json['links']['self'],
       webLink: json['links']['web'],
       id: json['id']??"",
       objectNumber: json['objectNumber']??"",
       title: json['title']??"",
-      hasImage: json['hasImage']??"",
+      hasImage: json['hasImage']?? false,
       principalOrFirstMaker: json['principalOrFirstMaker']??"",
       longTitle: json['longTitle']??"",
       showImage: json['showImage']??"",
