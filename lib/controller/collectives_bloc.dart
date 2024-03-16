@@ -7,18 +7,21 @@ import 'dart:convert';
 
 class CollectivesBloc {
   // Singleton instance
-  static CollectivesBloc _instance = CollectivesBloc._internal();
+  static CollectivesBloc _instance = CollectivesBloc._internal(MobileAppItems.numberOfItems);
 
   factory CollectivesBloc() {
     return _instance;
   }
+
+  int itemsPerPage;
+
 
   static List<ArtObject> collectionData=[];
 
   // HTTP client instance
   http.Client httpClient = http.Client();
   Connectivity connectivity=Connectivity();
-  CollectivesBloc._internal();
+  CollectivesBloc._internal(this.itemsPerPage);
 
   // StreamController for broadcasting stream
   final _artObjectsController = StreamController<List<ArtObject>>.broadcast();
@@ -30,19 +33,28 @@ class CollectivesBloc {
   Future<void> fetchData() async {
     try {
       List<ArtObject> artObjects = [];
+      List<String> id=[];
       // Check internet connection
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         throw Exception('No internet connection');
       }
 
-      final response = await http.get(Uri.parse(MobileAppItems.collectionApiAdress("en")));
+
+      String url=MobileAppItems.searchText.length>0?MobileAppItems.collectionSearch(MobileAppItems.searchText):MobileAppItems.collectionApiAdress("en");
+
+      final response = await http.get(Uri.parse(url));
+
+
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
 
         for (var json in jsonData['artObjects']) {
-          artObjects.add(ArtObject.fromJson(json));
+
+        if(!id.contains(ArtObject.fromJson(json).id)){artObjects.add(ArtObject.fromJson(json));
         }
+        id.add(ArtObject.fromJson(json).id);}
         collectionData.clear();
         collectionData = artObjects;
         _artObjectsController.sink.add(artObjects);

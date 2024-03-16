@@ -14,7 +14,7 @@ class DetailBloc {
   Stream<ArtObjectResponse> get detailDataStream => _detailDataController.stream;
 
   Future<void> fetchData(String selfLink) async {
-print(detailLink);
+
     try {
       // Check internet connection
       var connectivityResult = await Connectivity().checkConnectivity();
