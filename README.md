@@ -7,11 +7,7 @@ Test:Mocktail
 
 App Screenshots
 <p float="left">
-  <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/83be5bd0-5e3d-4a2b-b007-8ab687f8b3a2" width="100" />
-  <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/378687f5-1c40-44f4-8038-875244d1860f" width="100" /> 
-  <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/9c97a9e2-3b29-4847-999f-fcf446a75714" width="100" />
-  <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/51ed7557-098e-4060-abc7-959442d6118b" width="100" />
-  <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/223739a1-4488-4e4d-9e3b-b9e60a558add" width="100" />
+<img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/7b11a3a5-768b-40d0-a792-366eb27a62df" width="100"> <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/5d84f6ab-8781-4e11-956b-7c00211867fb" width="100"> <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/f97867bc-0a8a-4234-b20c-33a2af025526" width="100"> <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/5e049a44-6b30-4d46-a38c-18615700096a" width="100"> <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/91cb4201-cde3-4f4c-a2b3-202bca7d8c5a" width="100">
 </p>
 
 [![Watch the app video](https://via.placeholder.com/300x169.png?text=Click+Here+to+Watch+the+App+Video)](https://drive.google.com/file/d/17sWySC13uXKXCPISamUtfjhLB-pQIdfE/view?usp=sharing)
