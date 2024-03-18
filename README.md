@@ -15,3 +15,6 @@ App Screenshots
   <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/91cb4201-cde3-4f4c-a2b3-202bca7d8c5a" width="100">
 </p>
 
+<p>
+[![Video Title](http://img.youtube.com/vi/67C_79KRn3Y/0.jpg)](http://www.youtube.com/watch?v=67C_79KRn3Y)
+</p>
