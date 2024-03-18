@@ -15,5 +15,12 @@ App Screenshots
   <img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/91cb4201-cde3-4f4c-a2b3-202bca7d8c5a" width="100">
 </p>
 
-
+Rijks Museum App Video(Its a unlisted video that can only be accesed by a link) (its not public)
 [![Rijks Museum App Video](https://img.youtube.com/vi/67C_79KRn3Y/0.jpg)](https://www.youtube.com/watch?v=67C_79KRn3Y "Watch the video")
+
+App Design
+
+<img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/52595094-33d1-43e4-8605-67088c708e4e" width="100">
+<img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/74babad1-e662-4fb9-9a9e-bed3a5e41650" width="100">
+<img src="https://github.com/volusanmaz/rijksmuseum/assets/102143944/0e7b9b8d-cc26-47f7-9f0f-e44307a051b0" width="100">
+
