@@ -21,10 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _itemsPerPage.text = MobileAppItems.numberOfItems.toString();
   }
 
-  final TextEditingController  _pageNumber = TextEditingController();
+  final TextEditingController _pageNumber = TextEditingController();
   final TextEditingController _itemsPerPage = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
-
+  bool _isGridClicked = true;
   bool _isSearching = false;
   bool _isLoading = false;
 
@@ -46,7 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               child: AppBar(
-                backgroundColor: MobileAppItems.backgroundColor, // Use your preferred color
+                backgroundColor: MobileAppItems.backgroundColor,
+                // Use your preferred color
                 title: _isSearching
                     ? TextField(
                         controller: _searchController,
@@ -56,44 +57,53 @@ class _HomeScreenState extends State<HomeScreen> {
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: Colors.black),
                         ),
-                        style: const TextStyle(color: Colors.black, fontSize: 18),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 18),
                         onChanged: (query) {
-                          MobileAppItems.searchText=query;
+                          MobileAppItems.searchText = query;
                           CollectivesBloc().fetchData();
                         },
                       )
                     : const Text('Rijks Museum Assignment',
                         style: TextStyle(fontSize: 18)),
                 actions: [
-                  !_isSearching?
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isSearching = !_isSearching;
+                  !_isSearching
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isSearching = !_isSearching;
+                              });
+                            },
+                            child: const Icon(Icons.search),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _searchController.text = "";
+                                MobileAppItems.searchText = "";
+                                _isSearching = !_isSearching;
+                                CollectivesBloc().fetchData();
+                              });
+                            },
+                            child: const Icon(Icons.search_off),
+                          ),
+                        ),
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        _isGridClicked=!_isGridClicked;
+                      });
 
-                          });
-                        },
-                        child:const Icon(Icons.search),
-                      ),
-                    ):Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _searchController.text="";
-            MobileAppItems.searchText="";
-            _isSearching = !_isSearching;
-            CollectivesBloc().fetchData();
-          });
-        },
-        child:const Icon(Icons.search_off),
-      ),
-    ),
-                  const Padding(
-                    padding:  EdgeInsets.all(8.0),
-                    child:  Icon(Icons.grid_on),
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.grid_on),
+                    ),
                   ),
                 ],
               ))),
@@ -166,94 +176,137 @@ class _HomeScreenState extends State<HomeScreen> {
             return Column(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    width: (MediaQuery.of(context).size.width > 700)
-                        ? MediaQuery.of(context).size.width * 0.5
-                        : MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      itemCount: CollectivesBloc.collectionData.length,
-                      itemBuilder: (context, index) {
-                        var artObject = CollectivesBloc.collectionData[index];
 
-                        return Card(
-                          color: MobileAppItems.backgroundColor,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
-                          elevation: 4.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(8.0),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
+                    child: SizedBox(
+                      width: (MediaQuery.of(context).size.width > 700)
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                      child: AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 500),
+                        firstCurve: Curves.easeOut,
+                        secondCurve: Curves.easeIn,
+                        sizeCurve: Curves.easeInOut,
+                        crossFadeState: _isGridClicked ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                        firstChild: SizedBox(
+                          width: (MediaQuery.of(context).size.width > 700)
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                          child: GridView.builder(
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                              (MediaQuery.of(context).size.width > 700)
+                                  ?  4
+                                  : 2
+                              ,
+                              childAspectRatio: 1.0,
+                              crossAxisSpacing:
+                              4, // Space between items horizontally
+                              mainAxisSpacing:
+                              4, // Space between items vertically
+                            ),
+                            itemCount: CollectivesBloc.collectionData.length,
+                            itemBuilder: (context, index) {
+                              var artObject =
+                              CollectivesBloc.collectionData[index];
+
+                              return Card(
+                                clipBehavior: Clip.antiAlias,
+                                color: MobileAppItems.backgroundColor,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                elevation: 4.0,
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: !(MediaQuery.of(context).size.width >
-                                          700)
-                                      ? Stack(
+                                ),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.all(8.0),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(8.0),
+                                        child:
+                                        !(MediaQuery.of(context)
+                                            .size
+                                            .width >
+                                            700)
+                                            ? Stack(
                                           children: [
                                             artObject.hasImage
                                                 ? Image.network(
-                                                    artObject.headerImage!.url,
-                                                    height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        (artObject.headerImage!
-                                                                .height /
-                                                            artObject
-                                                                .headerImage!
-                                                                .width),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      } else {
-                                                        return Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            value: loadingProgress
-                                                                        .expectedTotalBytes !=
-                                                                    null
-                                                                ? loadingProgress
-                                                                        .cumulativeBytesLoaded /
-                                                                    loadingProgress
-                                                                        .expectedTotalBytes!
-                                                                : null,
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                  )
+                                              artObject
+                                                  .headerImage!
+                                                  .url,
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width *
+                                                  (artObject
+                                                      .headerImage!
+                                                      .height /
+                                                      artObject
+                                                          .headerImage!
+                                                          .width),
+                                              width:
+                                              MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit.fill,
+                                              loadingBuilder:
+                                                  (context,
+                                                  child,
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                } else {
+                                                  return Center(
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      value: loadingProgress.expectedTotalBytes !=
+                                                          null
+                                                          ? loadingProgress.cumulativeBytesLoaded /
+                                                          loadingProgress.expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            )
                                                 : Image.asset(
-                                                    "assets/nophoto.jpg",
-                                                    height: 200),
+                                              "assets/nophoto.jpg",
+                                              height: 120,
+                                              width:
+                                              MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit.fill,
+                                            ),
                                             Positioned(
                                               bottom: 8.0,
                                               right: 8.0,
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  navigateToNextPage(artObject);
+                                                  navigateToNextPage(
+                                                      artObject);
                                                 },
                                                 child: Container(
                                                   decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
+                                                  const BoxDecoration(
+                                                    shape: BoxShape
+                                                        .circle,
                                                     color: Colors
                                                         .blue, // Background color of the circular container
                                                   ),
                                                   child: const Icon(
                                                     Icons.search,
-                                                    color: Colors.white,
+                                                    color:
+                                                    Colors.white,
                                                     size: 24.0,
                                                   ),
                                                 ),
@@ -261,72 +314,70 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ],
                                         )
-                                      : Stack(
+                                            : Stack(
                                           children: [
                                             Center(
-                                              child: artObject.hasImage
+                                              child:
+                                              artObject.hasImage
                                                   ? Image.network(
-                                                      artObject
-                                                          .headerImage!.url,
-                                                      height: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width *
-                                                          (artObject
-                                                                  .headerImage!
-                                                                  .height /
-                                                              artObject
-                                                                  .headerImage!
-                                                                  .width),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      fit: BoxFit.fill,
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      loadingProgress
-                                                                          .expectedTotalBytes!
-                                                                  : null,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                    )
+                                                artObject
+                                                    .headerImage!
+                                                    .url,
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    (artObject.headerImage!.height /
+                                                        artObject.headerImage!.width),
+                                                width: MediaQuery.of(
+                                                    context)
+                                                    .size
+                                                    .width,
+                                                fit: BoxFit
+                                                    .fill,
+                                                loadingBuilder:
+                                                    (context,
+                                                    child,
+                                                    loadingProgress) {
+                                                  if (loadingProgress ==
+                                                      null) {
+                                                    return child;
+                                                  } else {
+                                                    return Center(
+                                                      child:
+                                                      CircularProgressIndicator(
+                                                        value: loadingProgress.expectedTotalBytes != null
+                                                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              )
                                                   : Image.asset(
-                                                      "assets/nophoto.jpg",
-                                                      height: 200),
+                                                "assets/nophoto.jpg",
+                                                height: 200,
+                                              ),
                                             ),
                                             Positioned(
                                               bottom: 16.0,
                                               right: 64.0,
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  navigateToNextPage(artObject);
+                                                  navigateToNextPage(
+                                                      artObject);
                                                 },
                                                 child: Container(
                                                   decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
+                                                  const BoxDecoration(
+                                                    shape: BoxShape
+                                                        .circle,
                                                     color: Colors
                                                         .blue, // Background color of the circular container
                                                   ),
                                                   child: const Icon(
                                                     Icons.search,
-                                                    color: Colors.white,
+                                                    color:
+                                                    Colors.white,
                                                     size: 24.0,
                                                   ),
                                                 ),
@@ -334,48 +385,271 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ],
                                         ),
-                                ),
-                                const SizedBox(height: 8.0),
-                                !artObject.showLongTitle
-                                    ? GestureDetector(
+                                      ),
+                                      const SizedBox(height: 12.0),
+                                      !artObject.showLongTitle
+                                          ? GestureDetector(
                                         onTap: () {
                                           setState(() {
                                             artObject.showLongTitle =
-                                                !artObject.showLongTitle;
+                                            !artObject.showLongTitle;
                                           });
                                         },
                                         child: Text(
                                           "${artObject.title}...",
+                                          overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16.0,
                                           ),
                                         ),
                                       )
-                                    : GestureDetector(
+                                          : GestureDetector(
                                         onTap: () {
                                           setState(() {
                                             artObject.showLongTitle =
-                                                !artObject.showLongTitle;
+                                            !artObject.showLongTitle;
                                           });
                                         },
                                         child: Text(
                                           artObject.longTitle,
+                                          overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16.0,
                                           ),
                                         ),
                                       ),
-                                const SizedBox(height: 4.0),
-                              ],
-                            ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        )
+                        ,secondChild:SizedBox(
+                        width: (MediaQuery.of(context).size.width > 700)
+                            ? MediaQuery.of(context).size.width * 0.5
+                            : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                        child: ListView.builder(
+                          itemCount: CollectivesBloc.collectionData.length,
+                          itemBuilder: (context, index) {
+                            var artObject =
+                            CollectivesBloc.collectionData[index];
+
+                            return Card(
+                              color: MobileAppItems.backgroundColor,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16.0),
+                              elevation: 4.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.all(8.0),
+                                title: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.circular(8.0),
+                                      child: !(MediaQuery.of(context)
+                                          .size
+                                          .width >
+                                          700)
+                                          ? Stack(
+                                        children: [
+                                          artObject.hasImage
+                                              ? Image.network(
+                                            artObject
+                                                .headerImage!.url,
+                                            height: MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width *
+                                                (artObject
+                                                    .headerImage!
+                                                    .height /
+                                                    artObject
+                                                        .headerImage!
+                                                        .width),
+                                            width: MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder: (context,
+                                                child,
+                                                loadingProgress) {
+                                              if (loadingProgress ==
+                                                  null) {
+                                                return child;
+                                              } else {
+                                                return Center(
+                                                  child:
+                                                  CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                        null
+                                                        ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          )
+                                              : Image.asset(
+                                              "assets/nophoto.jpg",
+                                              height: 200),
+                                          Positioned(
+                                            bottom: 8.0,
+                                            right: 8.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateToNextPage(
+                                                    artObject);
+                                              },
+                                              child: Container(
+                                                decoration:
+                                                const BoxDecoration(
+                                                  shape:
+                                                  BoxShape.circle,
+                                                  color: Colors
+                                                      .blue, // Background color of the circular container
+                                                ),
+                                                child: const Icon(
+                                                  Icons.search,
+                                                  color: Colors.white,
+                                                  size: 24.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                          : Stack(
+                                        children: [
+                                          Center(
+                                            child: artObject.hasImage
+                                                ? Image.network(
+                                              artObject
+                                                  .headerImage!
+                                                  .url,
+                                              height: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width *
+                                                  (artObject
+                                                      .headerImage!
+                                                      .height /
+                                                      artObject
+                                                          .headerImage!
+                                                          .width),
+                                              width:
+                                              MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit.fill,
+                                              loadingBuilder:
+                                                  (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                } else {
+                                                  return Center(
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      value: loadingProgress.expectedTotalBytes !=
+                                                          null
+                                                          ? loadingProgress.cumulativeBytesLoaded /
+                                                          loadingProgress.expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            )
+                                                : Image.asset(
+                                                "assets/nophoto.jpg",
+                                                height: 200),
+                                          ),
+                                          Positioned(
+                                            bottom: 16.0,
+                                            right: 64.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateToNextPage(
+                                                    artObject);
+                                              },
+                                              child: Container(
+                                                decoration:
+                                                const BoxDecoration(
+                                                  shape:
+                                                  BoxShape.circle,
+                                                  color: Colors
+                                                      .blue, // Background color of the circular container
+                                                ),
+                                                child: const Icon(
+                                                  Icons.search,
+                                                  color: Colors.white,
+                                                  size: 24.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                    !artObject.showLongTitle
+                                        ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          artObject.showLongTitle =
+                                          !artObject.showLongTitle;
+                                        });
+                                      },
+                                      child: Text(
+                                        "${artObject.title}...",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    )
+                                        : GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          artObject.showLongTitle =
+                                          !artObject.showLongTitle;
+                                        });
+                                      },
+                                      child: Text(
+                                        artObject.longTitle,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4.0),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      ),
                     ),
                   ),
-                ),
+
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: PreferredSize(
@@ -504,57 +778,62 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Oops!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'An error occurred:',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      snapshot.error.toString(),
-                      style: const TextStyle(fontSize: 16, color: Colors.red),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _isLoading = true; // Update loading state
-                        });
+                child: Container(
+                  height: MediaQuery.of(context).size.height*0.4,
+                  decoration: BoxDecoration(color:Colors.white.withOpacity(0.8),borderRadius: BorderRadius.circular(10)),
 
-                        Future.delayed(const Duration(seconds: 3), () {
-                          CollectivesBloc().fetchData().then((_) {
-                            setState(() {
-                              _isLoading =
-                                  false; // Reset loading state after fetch
-                            });
-                          }).catchError((error) {
-                            setState(() {
-                              _isLoading =
-                                  false; // Reset loading state on error
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 60,
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Oops!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'An error occurred:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        snapshot.error.toString(),
+                        style: const TextStyle(fontSize: 16, color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _isLoading = true; // Update loading state
+                          });
+                  
+                          Future.delayed(const Duration(seconds: 3), () {
+                            CollectivesBloc().fetchData().then((_) {
+                              setState(() {
+                                _isLoading =
+                                    false; // Reset loading state after fetch
+                              });
+                            }).catchError((error) {
+                              setState(() {
+                                _isLoading =
+                                    false; // Reset loading state on error
+                              });
                             });
                           });
-                        });
-                      },
-                      child: const Text('Retry'),
-                    ),
-                  ],
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -565,217 +844,472 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: SizedBox(
                     width: (MediaQuery.of(context).size.width > 700)
                         ? MediaQuery.of(context).size.width * 0.5
-                        : MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      itemCount: CollectivesBloc.collectionData.length,
-                      itemBuilder: (context, index) {
-                        var artObject = CollectivesBloc.collectionData[index];
-
-                        return Card(
-                          color: MobileAppItems.backgroundColor,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
-                          elevation: 4.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                        : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                    child: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 500),
+                      firstCurve: Curves.easeOut,
+                      secondCurve: Curves.easeIn,
+                      sizeCurve: Curves.easeInOut,
+                      crossFadeState: _isGridClicked ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      firstChild: SizedBox(
+                        width: (MediaQuery.of(context).size.width > 700)
+                            ? MediaQuery.of(context).size.width * 0.5
+                            : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                        child: GridView.builder(
+                          gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                            (MediaQuery.of(context).size.width > 700)
+                                ?  4
+                                : 2
+                            ,
+                            childAspectRatio: 1.0,
+                            crossAxisSpacing:
+                            4, // Space between items horizontally
+                            mainAxisSpacing:
+                            4, // Space between items vertically
                           ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(8.0),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: !(MediaQuery.of(context).size.width >
+                          itemCount: CollectivesBloc.collectionData.length,
+                          itemBuilder: (context, index) {
+                            var artObject =
+                            CollectivesBloc.collectionData[index];
+
+                            return Card(
+                              clipBehavior: Clip.antiAlias,
+                              color: MobileAppItems.backgroundColor,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16.0),
+                              elevation: 4.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.all(8.0),
+                                title: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.circular(8.0),
+                                      child:
+                                      !(MediaQuery.of(context)
+                                          .size
+                                          .width >
                                           700)
-                                      ? Stack(
-                                          children: [
+                                          ? Stack(
+                                        children: [
+                                          artObject.hasImage
+                                              ? Image.network(
+                                            artObject
+                                                .headerImage!
+                                                .url,
+                                            height: MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width *
+                                                (artObject
+                                                    .headerImage!
+                                                    .height /
+                                                    artObject
+                                                        .headerImage!
+                                                        .width),
+                                            width:
+                                            MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder:
+                                                (context,
+                                                child,
+                                                loadingProgress) {
+                                              if (loadingProgress ==
+                                                  null) {
+                                                return child;
+                                              } else {
+                                                return Center(
+                                                  child:
+                                                  CircularProgressIndicator(
+                                                    value: loadingProgress.expectedTotalBytes !=
+                                                        null
+                                                        ? loadingProgress.cumulativeBytesLoaded /
+                                                        loadingProgress.expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          )
+                                              : Image.asset(
+                                            "assets/nophoto.jpg",
+                                            height: 120,
+                                            width:
+                                            MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                          ),
+                                          Positioned(
+                                            bottom: 8.0,
+                                            right: 8.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateToNextPage(
+                                                    artObject);
+                                              },
+                                              child: Container(
+                                                decoration:
+                                                const BoxDecoration(
+                                                  shape: BoxShape
+                                                      .circle,
+                                                  color: Colors
+                                                      .blue, // Background color of the circular container
+                                                ),
+                                                child: const Icon(
+                                                  Icons.search,
+                                                  color:
+                                                  Colors.white,
+                                                  size: 24.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                          : Stack(
+                                        children: [
+                                          Center(
+                                            child:
                                             artObject.hasImage
                                                 ? Image.network(
-                                                    artObject.headerImage!.url,
-                                                    height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        (artObject.headerImage!
-                                                                .height /
-                                                            artObject
-                                                                .headerImage!
-                                                                .width),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fit: BoxFit.fill,
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      } else {
-                                                        return Center(
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            value: loadingProgress
-                                                                        .expectedTotalBytes !=
-                                                                    null
-                                                                ? loadingProgress
-                                                                        .cumulativeBytesLoaded /
-                                                                    loadingProgress
-                                                                        .expectedTotalBytes!
-                                                                : null,
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                  )
-                                                : Image.asset(
-                                                    "assets/nophoto.jpg",
-                                                    height: 120,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                            Positioned(
-                                              bottom: 8.0,
-                                              right: 8.0,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  navigateToNextPage(artObject);
-                                                },
-                                                child: Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors
-                                                        .blue, // Background color of the circular container
-                                                  ),
-                                                  child: const Icon(
-                                                    Icons.search,
-                                                    color: Colors.white,
-                                                    size: 24.0,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Stack(
-                                          children: [
-                                            Center(
-                                              child: artObject.hasImage
-                                                  ? Image.network(
-                                                      artObject
-                                                          .headerImage!.url,
-                                                      height: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width *
-                                                          (artObject
-                                                                  .headerImage!
-                                                                  .height /
-                                                              artObject
-                                                                  .headerImage!
-                                                                  .width),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      fit: BoxFit.fill,
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        } else {
-                                                          return Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      loadingProgress
-                                                                          .expectedTotalBytes!
-                                                                  : null,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                    )
-                                                  : Image.asset(
-                                                      "assets/nophoto.jpg",
-                                                      height: 200,
+                                              artObject
+                                                  .headerImage!
+                                                  .url,
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                                  (artObject.headerImage!.height /
+                                                      artObject.headerImage!.width),
+                                              width: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit
+                                                  .fill,
+                                              loadingBuilder:
+                                                  (context,
+                                                  child,
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                } else {
+                                                  return Center(
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      value: loadingProgress.expectedTotalBytes != null
+                                                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                                          : null,
                                                     ),
+                                                  );
+                                                }
+                                              },
+                                            )
+                                                : Image.asset(
+                                              "assets/nophoto.jpg",
+                                              height: 200,
                                             ),
-                                            Positioned(
-                                              bottom: 16.0,
-                                              right: 64.0,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  navigateToNextPage(artObject);
-                                                },
-                                                child: Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors
-                                                        .blue, // Background color of the circular container
-                                                  ),
-                                                  child: const Icon(
-                                                    Icons.search,
-                                                    color: Colors.white,
-                                                    size: 24.0,
-                                                  ),
+                                          ),
+                                          Positioned(
+                                            bottom: 16.0,
+                                            right: 64.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateToNextPage(
+                                                    artObject);
+                                              },
+                                              child: Container(
+                                                decoration:
+                                                const BoxDecoration(
+                                                  shape: BoxShape
+                                                      .circle,
+                                                  color: Colors
+                                                      .blue, // Background color of the circular container
+                                                ),
+                                                child: const Icon(
+                                                  Icons.search,
+                                                  color:
+                                                  Colors.white,
+                                                  size: 24.0,
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                ),
-                                const SizedBox(height: 8.0),
-                                !artObject.showLongTitle
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            artObject.showLongTitle =
-                                                !artObject.showLongTitle;
-                                          });
-                                        },
-                                        child: Text(
-                                          "${artObject.title}...",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
                                           ),
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            artObject.showLongTitle =
-                                                !artObject.showLongTitle;
-                                          });
-                                        },
-                                        child: Text(
-                                          artObject.longTitle,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
-                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12.0),
+                                    !artObject.showLongTitle
+                                        ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          artObject.showLongTitle =
+                                          !artObject.showLongTitle;
+                                        });
+                                      },
+                                      child: Text(
+                                        "${artObject.title}...",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
                                         ),
                                       ),
-                                const SizedBox(height: 4.0),
-                              ],
+                                    )
+                                        : GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          artObject.showLongTitle =
+                                          !artObject.showLongTitle;
+                                        });
+                                      },
+                                      child: Text(
+                                        artObject.longTitle,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                      ,secondChild:SizedBox(
+                      width: (MediaQuery.of(context).size.width > 700)
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height,
+                        child: ListView.builder(
+                        itemCount: CollectivesBloc.collectionData.length,
+                        itemBuilder: (context, index) {
+                          var artObject =
+                          CollectivesBloc.collectionData[index];
+
+                          return Card(
+                            color: MobileAppItems.backgroundColor,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16.0),
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                          ),
-                        );
-                      },
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(8.0),
+                              title: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(8.0),
+                                    child: !(MediaQuery.of(context)
+                                        .size
+                                        .width >
+                                        700)
+                                        ? Stack(
+                                      children: [
+                                        artObject.hasImage
+                                            ? Image.network(
+                                          artObject
+                                              .headerImage!.url,
+                                          height: MediaQuery.of(
+                                              context)
+                                              .size
+                                              .width *
+                                              (artObject
+                                                  .headerImage!
+                                                  .height /
+                                                  artObject
+                                                      .headerImage!
+                                                      .width),
+                                          width: MediaQuery.of(
+                                              context)
+                                              .size
+                                              .width,
+                                          fit: BoxFit.fill,
+                                          loadingBuilder: (context,
+                                              child,
+                                              loadingProgress) {
+                                            if (loadingProgress ==
+                                                null) {
+                                              return child;
+                                            } else {
+                                              return Center(
+                                                child:
+                                                CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                      null
+                                                      ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        )
+                                            : Image.asset(
+                                            "assets/nophoto.jpg",
+                                            height: 200),
+                                        Positioned(
+                                          bottom: 8.0,
+                                          right: 8.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              navigateToNextPage(
+                                                  artObject);
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              const BoxDecoration(
+                                                shape:
+                                                BoxShape.circle,
+                                                color: Colors
+                                                    .blue, // Background color of the circular container
+                                              ),
+                                              child: const Icon(
+                                                Icons.search,
+                                                color: Colors.white,
+                                                size: 24.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                        : Stack(
+                                      children: [
+                                        Center(
+                                          child: artObject.hasImage
+                                              ? Image.network(
+                                            artObject
+                                                .headerImage!
+                                                .url,
+                                            height: MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width *
+                                                (artObject
+                                                    .headerImage!
+                                                    .height /
+                                                    artObject
+                                                        .headerImage!
+                                                        .width),
+                                            width:
+                                            MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder:
+                                                (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress ==
+                                                  null) {
+                                                return child;
+                                              } else {
+                                                return Center(
+                                                  child:
+                                                  CircularProgressIndicator(
+                                                    value: loadingProgress.expectedTotalBytes !=
+                                                        null
+                                                        ? loadingProgress.cumulativeBytesLoaded /
+                                                        loadingProgress.expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          )
+                                              : Image.asset(
+                                              "assets/nophoto.jpg",
+                                              height: 200),
+                                        ),
+                                        Positioned(
+                                          bottom: 16.0,
+                                          right: 64.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              navigateToNextPage(
+                                                  artObject);
+                                            },
+                                            child: Container(
+                                              decoration:
+                                              const BoxDecoration(
+                                                shape:
+                                                BoxShape.circle,
+                                                color: Colors
+                                                    .blue, // Background color of the circular container
+                                              ),
+                                              child: const Icon(
+                                                Icons.search,
+                                                color: Colors.white,
+                                                size: 24.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  !artObject.showLongTitle
+                                      ? GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        artObject.showLongTitle =
+                                        !artObject.showLongTitle;
+                                      });
+                                    },
+                                    child: Text(
+                                      "${artObject.title}...",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  )
+                                      : GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        artObject.showLongTitle =
+                                        !artObject.showLongTitle;
+                                      });
+                                    },
+                                    child: Text(
+                                      artObject.longTitle,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4.0),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                                            ),
+                      ),
                     ),
                   ),
                 ),

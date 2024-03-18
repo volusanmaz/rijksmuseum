@@ -3,7 +3,7 @@ import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart
 import 'package:flutter/material.dart';
 class MobileAppItems{
   static int pageNumber=5;
-  static int numberOfItems=5;
+  static int numberOfItems=10;
   static String apiKey="";
   static String searchText="";
   static bool homeScreenShown=false;

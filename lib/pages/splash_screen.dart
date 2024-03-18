@@ -63,56 +63,60 @@ class _SplashScreenState extends State<SplashScreen> {
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 60,
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            'Oops!',
-                            style:  TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height*0.4,
+                        decoration: BoxDecoration(color:Colors.white.withOpacity(0.8),borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                              size: 60,
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'An error occurred:',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            snapshot.error.toString(),
-                            style: const TextStyle(fontSize: 16, color: Colors.red),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {  setState(() {
-                              _isLoading = true; // Update loading state
-                            });
-
-                            Future.delayed(const Duration(seconds: 3), () {
-                              CollectivesBloc().fetchData().then((_) {
-                                setState(() {
-                                  _isLoading = false; // Reset loading state after fetch
-                                });
-                              }).catchError((error) {
-                                setState(() {
-                                  _isLoading = false; // Reset loading state on error
+                            const SizedBox(height: 20),
+                            const Text(
+                              'Oops!',
+                              style:  TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'An error occurred:',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              snapshot.error.toString(),
+                              style: const TextStyle(fontSize: 16, color: Colors.red),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {  setState(() {
+                                _isLoading = true; // Update loading state
+                              });
+                        
+                              Future.delayed(const Duration(seconds: 3), () {
+                                CollectivesBloc().fetchData().then((_) {
+                                  setState(() {
+                                    _isLoading = false; // Reset loading state after fetch
+                                  });
+                                }).catchError((error) {
+                                  setState(() {
+                                    _isLoading = false; // Reset loading state on error
+                                  });
                                 });
                               });
-                            });
-                              CollectivesBloc().fetchData();
-
-                            },
-                            child: const Text('Retry'),
-                          ),
-                        ],
+                                CollectivesBloc().fetchData();
+                        
+                              },
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
@@ -124,6 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Future.delayed(const Duration(seconds: 1), () {
 
                 if(!MobileAppItems.homeScreenShown){
+                  Navigator.pop(context);
                 Navigator.of(context).push(
                   CubePageRoute(
                     enterPage: const HomeScreen(),
