@@ -24,4 +24,9 @@ class HeaderImage {
       height: json['height'],
       url: json['url'],
     );
-  }}
+
+
+  }
+
+
+}

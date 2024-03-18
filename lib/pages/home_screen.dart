@@ -1,5 +1,6 @@
 import 'package:cube_transition_plus/cube_transition_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rijksmuseum/controller/collectives_bloc.dart';
 import 'package:rijksmuseum/controller/detail_bloc.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
@@ -107,68 +108,82 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ))),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+      drawer:Drawer(
+        child: Column(
           children: <Widget>[
-            DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: MobileAppItems.backgroundColor,
-                  image: DecorationImage(
-                    image: AssetImage('assets/appicon.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container()),
-            Container(
-              color: MobileAppItems.backgroundColor,
-              height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Application Assignment',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                      color: MobileAppItems.backgroundColor,
+                      image: DecorationImage(
+                        image: AssetImage('assets/appicon.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                        ),
+                    child: Container(),
+                  ),
+                  Container(
+                    color: MobileAppItems.backgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextSpan(
-                            text:
-                                'This application is created for an assignment to utilize the Rijksmuseum API by ',
-                          ),
-                          TextSpan(
-                            text: 'Volkan Usanmaz',
+                          const Text(
+                            'Application Assignment',
                             style: TextStyle(
-                              color: Colors.red,
+                              color: Colors.black,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: const TextSpan(
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'This application is created for an assignment to utilize the Rijksmuseum API by ',
+                                ),
+                                TextSpan(
+                                  text: 'Volkan Usanmaz',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                ],
               ),
             ),
-            // Add more items here
+             ListTile(
+              leading: Icon(Icons.exit_to_app, color: Colors.red), // Exit icon
+              title: Text('Exit', style: TextStyle(fontSize: 24)),
+              onTap: () {
+                // Closes the app
+                SystemNavigator.pop();
+              },
+            ),
           ],
         ),
       ),
-      body: StreamBuilder<List<ArtObject>>(
+
+        body: StreamBuilder<List<ArtObject>>(
         stream: CollectivesBloc().artObjectsStream,
         builder: (context, snapshot) {
           if (_isLoading ||
@@ -353,9 +368,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   }
                                                 },
                                               )
-                                                  : Image.asset(
+                                                  :Image.asset(
                                                 "assets/nophoto.jpg",
-                                                height: 200,
+                                                height: 120,
+                                                width:
+                                                MediaQuery.of(
+                                                    context)
+                                                    .size
+                                                    .width,
+                                                fit: BoxFit.fill,
                                               ),
                                             ),
                                             Positioned(
@@ -503,8 +524,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             },
                                           )
                                               : Image.asset(
-                                              "assets/nophoto.jpg",
-                                              height: 200),
+                                            "assets/nophoto.jpg",
+                                            height: 120,
+                                            width:
+                                            MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                          ),
                                           Positioned(
                                             bottom: 8.0,
                                             right: 8.0,
@@ -576,8 +604,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               },
                                             )
                                                 : Image.asset(
-                                                "assets/nophoto.jpg",
-                                                height: 200),
+                                              "assets/nophoto.jpg",
+                                              height: 120,
+                                              width:
+                                              MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                           Positioned(
                                             bottom: 16.0,
@@ -1019,7 +1054,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             )
                                                 : Image.asset(
                                               "assets/nophoto.jpg",
-                                              height: 200,
+                                              height: 120,
+                                              width:
+                                              MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
                                           Positioned(
@@ -1167,8 +1208,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                         )
                                             : Image.asset(
-                                            "assets/nophoto.jpg",
-                                            height: 200),
+                                          "assets/nophoto.jpg",
+                                          height: 120,
+                                          width:
+                                          MediaQuery.of(
+                                              context)
+                                              .size
+                                              .width,
+                                          fit: BoxFit.fill,
+                                        ),
                                         Positioned(
                                           bottom: 8.0,
                                           right: 8.0,
@@ -1240,8 +1288,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             },
                                           )
                                               : Image.asset(
-                                              "assets/nophoto.jpg",
-                                              height: 200),
+                                            "assets/nophoto.jpg",
+                                            height: 120,
+                                            width:
+                                            MediaQuery.of(
+                                                context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
                                         Positioned(
                                           bottom: 16.0,

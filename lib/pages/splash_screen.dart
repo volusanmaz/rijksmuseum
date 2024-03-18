@@ -150,9 +150,5 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    CollectivesBloc().dispose();
-    super.dispose();
-  }
+
 }

@@ -6,6 +6,12 @@ import 'package:rijksmuseum/models/detail_models/art_object_detail_response.dart
 import 'dart:convert';
 
 class DetailBloc {
+
+  // HTTP client instance
+  http.Client httpClient = http.Client();
+  Connectivity connectivity=Connectivity();
+
+
   static bool containsImage=true;
   static ArtObjectResponse? detailData=null;
   static String detailLink="";
@@ -16,12 +22,13 @@ class DetailBloc {
   Future<void> fetchData(String selfLink) async {
 
     try {
+
       // Check internet connection
-      var connectivityResult = await Connectivity().checkConnectivity();
+      var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
         throw Exception('No internet connection');
       }
-      final response = await http.get(Uri.parse(selfLink));
+      final response = await httpClient.get(Uri.parse(selfLink));
 
         if (response.statusCode == 200) {
           Map<String, dynamic> jsonData = json.decode(response.body);
