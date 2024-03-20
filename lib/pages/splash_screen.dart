@@ -6,6 +6,10 @@ import 'package:rijksmuseum/pages/home_screen.dart';
 import 'package:rijksmuseum/controller/collectives_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
+  final CollectivesBloc collectivesBloc;
+
+  SplashScreen({Key? key, required this.collectivesBloc}) : super(key: key);
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -16,7 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    CollectivesBloc().fetchData();
+    setState(() {
+      widget.collectivesBloc.fetchData();
+    });
   }
   bool _isLoading=false;
   @override
@@ -24,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<List<ArtObject>>(
-          stream: CollectivesBloc().artObjectsStream,
+          stream: widget.collectivesBloc.artObjectsStream,
           builder: (context, snapshot) {
             if (_isLoading || snapshot.connectionState == ConnectionState.waiting) {
               return Stack(
@@ -100,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
                               });
                         
                               Future.delayed(const Duration(seconds: 3), () {
-                                CollectivesBloc().fetchData().then((_) {
+                                widget.collectivesBloc.fetchData().then((_) {
                                   setState(() {
                                     _isLoading = false; // Reset loading state after fetch
                                   });
@@ -110,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                   });
                                 });
                               });
-                                CollectivesBloc().fetchData();
+                              widget.collectivesBloc.fetchData();
                         
                               },
                               child: const Text('Retry'),
@@ -132,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Navigator.of(context).push(
                   CubePageRoute(
                     enterPage: const HomeScreen(),
-                    exitPage: SplashScreen(),
+                    exitPage: SplashScreen(collectivesBloc: CollectivesBloc()),
                     duration: const Duration(milliseconds: 2000),
                   ),
                 );MobileAppItems.homeScreenShown = true;}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:rijksmuseum/controller/collectives_bloc.dart';
 import 'package:rijksmuseum/controller/mobile_app_consts.dart';
 import 'package:rijksmuseum/pages/splash_screen.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen()
+        home: SplashScreen(collectivesBloc: CollectivesBloc(),)
     );
   }
 }
